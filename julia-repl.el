@@ -910,17 +910,10 @@ When called with a prefix argument, activate the home project."
 	      (s-join"\",\"" (s-split " " args t))) "\")" ))
 
 
-(defun julia-repl-with-args ()
-  (interactive)
+(defun julia-repl--ask-for-args ()
   (let ((str (read-from-minibuffer "Command line args: ")))
     (if (s-present? str)
 	(julia-repl--send-string (julia-repl--push-args str)))))
-
-(defun julia-repl-activate-parent-with-args (arg)
-  (interactive "P\ns")
-  (julia-repl-activate-parent arg)
-  (julia-repl-with-args args))
-
 
 (defun julia-repl-set-julia-editor (editor)
   "Set the JULIA_EDITOR environment variable."
