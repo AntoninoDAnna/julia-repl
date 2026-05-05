@@ -643,18 +643,22 @@ Valid keys are the first items in ‘julia-repl-executable-records’."
           inferior-buffer)))))
 
 ;;;###autoload
-(defun julia-repl ()
+(defun julia-repl (args)
   "Raise the Julia REPL inferior buffer, creating one if it does not exist.
 
 This is the standard entry point for using this package."
-  (interactive)
+  (interactive "P")
   (let ((script-buffer (current-buffer))
 	(inferior-buffer (julia-repl-inferior-buffer)))
     (with-current-buffer inferior-buffer
       (setq julia-repl--script-buffer script-buffer))
     (if julia-repl-pop-to-buffer
 	(pop-to-buffer inferior-buffer)
-      (switch-to-buffer inferior-buffer))))
+      (switch-to-buffer inferior-buffer)))
+  (if args
+      (julia-repl--send-string
+       (julia-repl--push-args
+	(read-from-minibuffer "Command line args: ")))))
 
 (defun julia-repl--switch-back ()
   "Switch to the buffer that was active before last call to `julia-repl'."
