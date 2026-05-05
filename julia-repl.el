@@ -899,6 +899,23 @@ When called with a prefix argument, activate the home project."
                    (expand-file-name (file-name-directory projectfile)) "\")")))
       (message "could not find project file"))))
 
+
+(defun julia-repl--push-args (args)
+  (s-prepend
+   (s-prepend "push!(ARGS,\""
+	      (s-join"\",\"" (s-split " " args t))) "\")" ))
+
+
+(defun julia-repl-with-args (args)
+  (interactive "s")
+  (julia-repl--send-string (julia-repl--push-args args)))
+
+(defun julia-repl-activate-parent-with-args (arg args)
+  (interactive "P\ns")
+  (julia-repl-activate-parent arg)
+  (julia-repl-with-args args))
+
+
 (defun julia-repl-set-julia-editor (editor)
   "Set the JULIA_EDITOR environment variable."
   (interactive)
